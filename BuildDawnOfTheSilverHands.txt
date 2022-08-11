@@ -1,0 +1,5 @@
+Log: Logs\Archives\BuildDawnOfTheSilverHands.log
+New Archive
+Set File Group Root: Data\
+Add File Group: BuildDawnOfTheSilverHandsFiles.txt
+Save Archive: Data\DawnOfTheSilverHands.bsa
