@@ -19,8 +19,10 @@ ARCHIVE_EXE = "Archive.exe"
 def echo_error(message: str):
     print(colored(message, 'red'))
 
+
 def echo_warn(message: str):
     print(colored(message, 'yellow'))
+
 
 def echo_info(message: str):
     print(message)
@@ -50,7 +52,7 @@ def copytree(src: str, dst: str):
     shutil.copy(src, dst)
 
 
-class EspBuilder:
+class NxBuilder:
     TAG_GAME_PATH = "game_path"
     TAG_BUILD_DST = "build_dst"
     TAG_BSA_TARGET = "bsa_target"
@@ -62,6 +64,18 @@ class EspBuilder:
     TAG_PREFIX_SEARCH_DIRS = "prefix_search_dirs"
     CSV_SEPARATOR = ","
     SKIP_LINE = "\n"
+
+    @staticmethod
+    def create_unninstall_script(proj_name: str):
+        print("todo")
+
+    @staticmethod
+    def create_readme(proj_name: str):
+        print("todo")
+
+    @staticmethod
+    def zip_project(proj_name: str):
+        print("todo")
 
     @staticmethod
     def parse_build_file(build_rules_file: str):
@@ -83,34 +97,34 @@ class EspBuilder:
         raw_prefix_accepted_extensions = ""
         for child in root:
             # GAME PATH
-            if child.tag == EspBuilder.TAG_GAME_PATH:
+            if child.tag == NxBuilder.TAG_GAME_PATH:
                 path_game_str = str(child.text).strip()
                 game_path = Path(path_game_str)
 
             # BUILD DST
-            elif child.tag == EspBuilder.TAG_BUILD_DST:
+            elif child.tag == NxBuilder.TAG_BUILD_DST:
                 build_dst_folder = str(child.text).strip()
 
             # BSA TARGET NAME
-            elif child.tag == EspBuilder.TAG_BSA_TARGET:
+            elif child.tag == NxBuilder.TAG_BSA_TARGET:
                 bsa_target_name = str(child.text).strip()
                 echo_info("BSA TARGET NAME: " + bsa_target_name)
 
             # GROUP ROOT
-            elif child.tag == EspBuilder.TAG_ROOT:
+            elif child.tag == NxBuilder.TAG_ROOT:
                 root_dir = str(child.text).strip()
                 echo_info("root directory: " + root_dir)
 
             # BUILD RULES
-            elif child.tag == EspBuilder.TAG_RULES:
+            elif child.tag == NxBuilder.TAG_RULES:
                 for rules_child in child:
-                    if rules_child.tag == EspBuilder.TAG_HARDCODED_FILES:
+                    if rules_child.tag == NxBuilder.TAG_HARDCODED_FILES:
                         raw_hardcoded_files = str(rules_child.text).strip()
-                    elif rules_child.tag == EspBuilder.TAG_PREFIX_FILES:
+                    elif rules_child.tag == NxBuilder.TAG_PREFIX_FILES:
                         raw_prefix_files = str(rules_child.text).strip()
-                    elif rules_child.tag == EspBuilder.TAG_PREFIX_SEARCH_DIRS:
+                    elif rules_child.tag == NxBuilder.TAG_PREFIX_SEARCH_DIRS:
                         raw_prefix_search_dirs = str(rules_child.text).strip()
-                    elif rules_child.tag == EspBuilder.TAG_PREFIX_ACCEPTED_EXTENSIONS:
+                    elif rules_child.tag == NxBuilder.TAG_PREFIX_ACCEPTED_EXTENSIONS:
                         raw_prefix_accepted_extensions = str(rules_child.text).strip()
 
         # validate data
@@ -133,10 +147,10 @@ class EspBuilder:
             echo_warn("Group root different of Data.")
 
         # parse filters
-        hardcoded_files = raw_hardcoded_files.split(EspBuilder.CSV_SEPARATOR)
-        prefix_files = raw_prefix_files.split(EspBuilder.CSV_SEPARATOR)
-        prefix_search_dirs = raw_prefix_search_dirs.split(EspBuilder.CSV_SEPARATOR)
-        prefix_accepted_extensions = raw_prefix_accepted_extensions.split(EspBuilder.CSV_SEPARATOR)
+        hardcoded_files = raw_hardcoded_files.split(NxBuilder.CSV_SEPARATOR)
+        prefix_files = raw_prefix_files.split(NxBuilder.CSV_SEPARATOR)
+        prefix_search_dirs = raw_prefix_search_dirs.split(NxBuilder.CSV_SEPARATOR)
+        prefix_accepted_extensions = raw_prefix_accepted_extensions.split(NxBuilder.CSV_SEPARATOR)
 
         hardcoded_files = list(filter(None, [s.strip() for s in hardcoded_files]))
         prefix_files = list(filter(None, [s.strip() for s in prefix_files]))
@@ -177,11 +191,11 @@ class EspBuilder:
             print(file)
 
         # create build object
-        builder = EspBuilder(game_path=game_path,
-                             build_dst=build_dst_folder,
-                             group_root=root_dir,
-                             bsa_name=bsa_target_name,
-                             all_files=list_all_valid_files)
+        builder = NxBuilder(game_path=game_path,
+                            build_dst=build_dst_folder,
+                            group_root=root_dir,
+                            bsa_name=bsa_target_name,
+                            all_files=list_all_valid_files)
         return True, builder
 
     def __init__(self, game_path, build_dst: str, group_root="Data", bsa_name="", all_files=[]):
@@ -199,16 +213,16 @@ class EspBuilder:
         # create files list
         files_content = ""
         for file in self.all_files:
-            files_content += file + EspBuilder.SKIP_LINE
+            files_content += file + NxBuilder.SKIP_LINE
         print("------------------------------")
         print(files_content)
         # create script
         script_content = ""
-        script_content += "Log: " + log_file + EspBuilder.SKIP_LINE
-        script_content += "New Archive" + EspBuilder.SKIP_LINE
-        script_content += "Set File Group Root: " + self.group_root + "\\" + EspBuilder.SKIP_LINE
-        script_content += "Add File Group: " + files_list + EspBuilder.SKIP_LINE
-        script_content += "Save Archive: " + bsa_target + EspBuilder.SKIP_LINE
+        script_content += "Log: " + log_file + NxBuilder.SKIP_LINE
+        script_content += "New Archive" + NxBuilder.SKIP_LINE
+        script_content += "Set File Group Root: " + self.group_root + "\\" + NxBuilder.SKIP_LINE
+        script_content += "Add File Group: " + files_list + NxBuilder.SKIP_LINE
+        script_content += "Save Archive: " + bsa_target + NxBuilder.SKIP_LINE
         print("------------------------------")
         print(script_content)
         with open(base_script, 'w') as file_base_script:
@@ -230,18 +244,20 @@ class EspBuilder:
             copytree(file_original_full_path, file_new_location)
 
     def build(self):
-        #  execute archive
-        print("todo")
+        self.copy()
+        self.create_unninstall_script(self.bsa_name)
+        self.create_readme(self.bsa_name)
+        self.zip_project(self.bsa_name)
 
 
-#  BsaBuild.py --config file.bsaproj
-#  BsaBuild.py --build file.bsaproj
+#  NxBuilder.py --config file.bsaproj
+#  NxBuilder.py --build file.bsaproj
 if __name__ == '__main__':
 
     run_opt = "config"
     proj_file = "DawnOfTheSilverHand.bsaproj"
 
-    ret, builder = EspBuilder.parse_build_file(proj_file)
+    ret, builder = NxBuilder.parse_build_file(proj_file)
 
     if ret == False:
         exit(-1)
