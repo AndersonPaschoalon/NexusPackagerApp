@@ -52,10 +52,10 @@ def copytree(src: str, dst: str):
     shutil.copy(src, dst)
 
 
-class NxBuilder:
+class NexusPackager:
     TAG_GAME_PATH = "game_path"
     TAG_BUILD_DST = "build_dst"
-    TAG_BSA_TARGET = "bsa_target"
+    TAG_TARGET = "target"
     TAG_ROOT = "group_root"
     TAG_RULES = "rules"
     TAG_HARDCODED_FILES = "hardcoded_files"
@@ -66,19 +66,47 @@ class NxBuilder:
     SKIP_LINE = "\n"
 
     @staticmethod
-    def create_unninstall_script(proj_name: str):
-        print("todo")
+    def create_unninstall_script(project_name: str, list_all_files: [], build_dst, group_root = ""):
+        script_name = "unninstall." + project_name + ".bat"
+        # start of script
+        script_content =  "@echo off" +  NexusPackager.SKIP_LINE
+        script_content += "setlocal" + NexusPackager.SKIP_LINE
+        script_content += ":PROMPT" + NexusPackager.SKIP_LINE
+        script_content += "SET /P AREYOUSURE=Are you sure you want to unninstall " + project_name + "(Y/[N])?"+ NexusPackager.SKIP_LINE
+        script_content += 'IF /I "%AREYOUSURE%" NEQ "Y" GOTO END' + NexusPackager.SKIP_LINE
+        script_content += NexusPackager.SKIP_LINE
+
+        for file_name in list_all_files:
+            if str(file_name).strip() != "":
+                # delete command
+                script_content += 'DEL "' + file_name + + '"' + NexusPackager.SKIP_LINE
+
+        # end of the script
+        script_content += ":END" + NexusPackager.SKIP_LINE
+        script_content += "endlocal" + NexusPackager.SKIP_LINE
+        script_content += NexusPackager.SKIP_LINE
+
+        # dst directory where the unninstall script will be saved.
+        path_script = os.path.join(".", build_dst, group_root, script_name)
+
+        # create script
+        with open(path_script, 'w') as f:
+            f.write(script_content)
 
     @staticmethod
-    def create_readme(proj_name: str):
-        print("todo")
-
-    @staticmethod
-    def zip_project(proj_name: str):
-        print("todo")
+    def zip_project(proj_name: str, build_dst: str):
+        output_filename = proj_name + ".zip"
+        dir_name = os.path.join(".", build_dst)
+        shutil.make_archive(output_filename, 'zip', dir_name)
 
     @staticmethod
     def parse_build_file(build_rules_file: str):
+        """
+        This method parses the build file rules and creates a build object that stores all neccessary rules to
+        package the right files.
+        :param build_rules_file: ncproj file wiht all necessary rules.
+        :return: returns (True, BuildObject) if the nxproj file was rightly parsed, (False, None) otherwise.
+        """
         path_rules = Path(build_rules_file)
         if not path_rules.is_file():
             echo_error(str.format("Config file {} does not exist!", build_rules_file))
@@ -89,7 +117,7 @@ class NxBuilder:
 
         game_path = Path("")
         build_dst_folder = ""
-        bsa_target_name = ""
+        mod_target_name = ""
         root_dir = ""
         raw_hardcoded_files = ""
         raw_prefix_files = ""
@@ -97,34 +125,34 @@ class NxBuilder:
         raw_prefix_accepted_extensions = ""
         for child in root:
             # GAME PATH
-            if child.tag == NxBuilder.TAG_GAME_PATH:
+            if child.tag == NexusPackager.TAG_GAME_PATH:
                 path_game_str = str(child.text).strip()
                 game_path = Path(path_game_str)
 
             # BUILD DST
-            elif child.tag == NxBuilder.TAG_BUILD_DST:
+            elif child.tag == NexusPackager.TAG_BUILD_DST:
                 build_dst_folder = str(child.text).strip()
 
             # BSA TARGET NAME
-            elif child.tag == NxBuilder.TAG_BSA_TARGET:
-                bsa_target_name = str(child.text).strip()
-                echo_info("BSA TARGET NAME: " + bsa_target_name)
+            elif child.tag == NexusPackager.TAG_TARGET:
+                mod_target_name = str(child.text).strip()
+                echo_info("MOD TARGET NAME: " + mod_target_name)
 
             # GROUP ROOT
-            elif child.tag == NxBuilder.TAG_ROOT:
+            elif child.tag == NexusPackager.TAG_ROOT:
                 root_dir = str(child.text).strip()
                 echo_info("root directory: " + root_dir)
 
             # BUILD RULES
-            elif child.tag == NxBuilder.TAG_RULES:
+            elif child.tag == NexusPackager.TAG_RULES:
                 for rules_child in child:
-                    if rules_child.tag == NxBuilder.TAG_HARDCODED_FILES:
+                    if rules_child.tag == NexusPackager.TAG_HARDCODED_FILES:
                         raw_hardcoded_files = str(rules_child.text).strip()
-                    elif rules_child.tag == NxBuilder.TAG_PREFIX_FILES:
+                    elif rules_child.tag == NexusPackager.TAG_PREFIX_FILES:
                         raw_prefix_files = str(rules_child.text).strip()
-                    elif rules_child.tag == NxBuilder.TAG_PREFIX_SEARCH_DIRS:
+                    elif rules_child.tag == NexusPackager.TAG_PREFIX_SEARCH_DIRS:
                         raw_prefix_search_dirs = str(rules_child.text).strip()
-                    elif rules_child.tag == NxBuilder.TAG_PREFIX_ACCEPTED_EXTENSIONS:
+                    elif rules_child.tag == NexusPackager.TAG_PREFIX_ACCEPTED_EXTENSIONS:
                         raw_prefix_accepted_extensions = str(rules_child.text).strip()
 
         # validate data
@@ -136,7 +164,7 @@ class NxBuilder:
             echo_error("Build folder not defined!")
             return False, None
 
-        if bsa_target_name == "":
+        if mod_target_name == "":
             echo_error("Target name not defined!")
             return False, None
 
@@ -147,10 +175,10 @@ class NxBuilder:
             echo_warn("Group root different of Data.")
 
         # parse filters
-        hardcoded_files = raw_hardcoded_files.split(NxBuilder.CSV_SEPARATOR)
-        prefix_files = raw_prefix_files.split(NxBuilder.CSV_SEPARATOR)
-        prefix_search_dirs = raw_prefix_search_dirs.split(NxBuilder.CSV_SEPARATOR)
-        prefix_accepted_extensions = raw_prefix_accepted_extensions.split(NxBuilder.CSV_SEPARATOR)
+        hardcoded_files = raw_hardcoded_files.split(NexusPackager.CSV_SEPARATOR)
+        prefix_files = raw_prefix_files.split(NexusPackager.CSV_SEPARATOR)
+        prefix_search_dirs = raw_prefix_search_dirs.split(NexusPackager.CSV_SEPARATOR)
+        prefix_accepted_extensions = raw_prefix_accepted_extensions.split(NexusPackager.CSV_SEPARATOR)
 
         hardcoded_files = list(filter(None, [s.strip() for s in hardcoded_files]))
         prefix_files = list(filter(None, [s.strip() for s in prefix_files]))
@@ -191,38 +219,50 @@ class NxBuilder:
             print(file)
 
         # create build object
-        builder = NxBuilder(game_path=game_path,
-                            build_dst=build_dst_folder,
-                            group_root=root_dir,
-                            bsa_name=bsa_target_name,
-                            all_files=list_all_valid_files)
+        builder = NexusPackager(game_path=game_path,
+                                build_dst=build_dst_folder,
+                                group_root=root_dir,
+                                target=mod_target_name,
+                                all_files=list_all_valid_files)
         return True, builder
 
-    def __init__(self, game_path, build_dst: str, group_root="Data", bsa_name="", all_files=[]):
+    def __init__(self, game_path, build_dst: str, group_root="Data", target="", all_files=[]):
+        """
+        Nexus packager object.
+        :param game_path: The path of the game, where the files are going to be looked for.
+        :param build_dst:
+        :param group_root:
+        :param target:
+        :param all_files:
+        """
         self.game_path = game_path
         self.build_dst = build_dst
         self.group_root = group_root
-        self.bsa_name = bsa_name
+        self.target = target
         self.all_files = all_files
 
-    def save_build_scripts(self):
-        base_script = "Build" + self.bsa_name + ".txt"
-        files_list = "Build" + self.bsa_name + "Files" + ".txt"
-        log_file = "Logs\\Archives\\Build" + self.bsa_name + ".log"
-        bsa_target = self.group_root + "\\" + self.bsa_name + ".bsa"
+    def _create_bsa_build_scripts(self):
+        """
+        Experimental. Create bsa build scripts.
+        :return:
+        """
+        base_script = "Build" + self.target + ".txt"
+        files_list = "Build" + self.target + "Files" + ".txt"
+        log_file = "Logs\\Archives\\Build" + self.target + ".log"
+        bsa_target = self.group_root + "\\" + self.target + ".bsa"
         # create files list
         files_content = ""
         for file in self.all_files:
-            files_content += file + NxBuilder.SKIP_LINE
+            files_content += file + NexusPackager.SKIP_LINE
         print("------------------------------")
         print(files_content)
         # create script
         script_content = ""
-        script_content += "Log: " + log_file + NxBuilder.SKIP_LINE
-        script_content += "New Archive" + NxBuilder.SKIP_LINE
-        script_content += "Set File Group Root: " + self.group_root + "\\" + NxBuilder.SKIP_LINE
-        script_content += "Add File Group: " + files_list + NxBuilder.SKIP_LINE
-        script_content += "Save Archive: " + bsa_target + NxBuilder.SKIP_LINE
+        script_content += "Log: " + log_file + NexusPackager.SKIP_LINE
+        script_content += "New Archive" + NexusPackager.SKIP_LINE
+        script_content += "Set File Group Root: " + self.group_root + "\\" + NexusPackager.SKIP_LINE
+        script_content += "Add File Group: " + files_list + NexusPackager.SKIP_LINE
+        script_content += "Save Archive: " + bsa_target + NexusPackager.SKIP_LINE
         print("------------------------------")
         print(script_content)
         with open(base_script, 'w') as file_base_script:
@@ -230,7 +270,11 @@ class NxBuilder:
         with open(files_list, 'w') as file_files_content:
             file_files_content.write(files_content)
 
-    def copy(self):
+    def create_local_copy(self):
+        """
+        Creates a local copy of the mod
+        :return:
+        """
         # crete build dir
         build_dst_dir = os.path.join(".", self.build_dst, self.group_root)
         if not os.path.exists(build_dst_dir) and build_dst_dir != "":
@@ -243,34 +287,39 @@ class NxBuilder:
             # copy all files
             copytree(file_original_full_path, file_new_location)
 
-    def build(self):
-        self.copy()
-        self.create_unninstall_script(self.bsa_name)
-        self.create_readme(self.bsa_name)
-        self.zip_project(self.bsa_name)
+    def package(self):
+        self.create_local_copy()
+        self.create_unninstall_script(self.target, self.all_files, self.build_dst, self.group_root)
+        self.zip_project(self.target, self.build_dst)
 
 
 #  NxBuilder.py --config file.bsaproj
 #  NxBuilder.py --build file.bsaproj
 if __name__ == '__main__':
+    proj_file = "./Test/TestProject.nxproj"
+    ret, builder = NexusPackager.parse_build_file(proj_file)
+    if ret == False:
+        exit(-1)
+    builder.package()
 
+"""
     run_opt = "config"
     proj_file = "DawnOfTheSilverHand.bsaproj"
 
-    ret, builder = NxBuilder.parse_build_file(proj_file)
+    ret, builder = NexusPackager.parse_build_file(proj_file)
 
     if ret == False:
         exit(-1)
 
     if run_opt == "config":
-        builder.save_build_scripts()
-        builder.copy()
+        builder._create_bsa_build_scripts()
+        builder.create_local_copy()
     elif run_opt == "build":
-        builder.copy()
+        builder.create_local_copy()
     elif run_opt == "help":
         print("todo")
     elif run_opt == "version":
         print("todo")
-
+"""
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

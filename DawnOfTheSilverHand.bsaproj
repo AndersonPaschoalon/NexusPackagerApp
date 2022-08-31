@@ -7,18 +7,22 @@
         C:\Program Files (x86)\Steam\steamapps\common\Skyrim
     </game_path>
     <!--
-    Folder where the Files will be placed. Suggestion: Release, Debug, version  name...
+    Local folder where the Files will be placed. Suggestion: Release, Debug, version  name...
     This will be created where this iscript is executed.
     -->
     <build_dst>
         Release
     </build_dst>
-    <!-- Name of the mod -->
-    <bsa_target>
-        DawnOfTheSilverHands
-    </bsa_target>
     <!--
-    Folder where the plugins are placed, usually Data.
+    Name of the mod. This name will be used to create: the name of the output zip, the name of the Readme and the
+    name of the name of the uninstall script.
+    -->
+    <target>
+        DawnOfTheSilverHands
+    </target>
+    <!--
+    Folder where the plugins are placed, usually Data for creation kit engine.
+    If this field is left empty, the files will be searched in the gama root folder.
     -->
     <group_root>
         Data
