@@ -3,9 +3,14 @@ import traceback
 import sys
 import getopt
 from os.path import exists
+from NexusPackager import NexusPackager
+from Utils import Utils
 
 
 class NexusBuildApp:
+
+    APP_NAME = "NexusBuild"
+    APP_VERSION = "0.1.0"
     SUCCESS = 0
     RET_ERROR_INVALID_ARGS = 1
     RET_ERROR_PARSING_ARGS = 2
@@ -16,7 +21,9 @@ class NexusBuildApp:
 
     @staticmethod
     def print_version():
-        print("todo")
+        print("")
+        print(NexusBuildApp.APP_NAME, " -- ", NexusBuildApp.APP_VERSION)
+        print("")
 
     @staticmethod
     def print_license():
@@ -24,8 +31,13 @@ class NexusBuildApp:
 
     @staticmethod
     def create_template(project_name):
-        print("todo")
-        return 1
+        project_name = str(project_name).strip()
+        try:
+            NexusPackager.create_nxproj_template(project_name)
+        except:
+            Utils.echo_error("Error Creating template.")
+            traceback.print_exc()
+        return 0
 
     @staticmethod
     def package_project(project_path):
@@ -42,7 +54,7 @@ class NexusBuildApp:
         arg_str = ""
         ret_val = -1
         try:
-            opts, args = getopt.getopt(argv,"p:t:h:v:l", ["path=", "template=", "help", "version", "license"])
+            opts, args = getopt.getopt(argv, "p:t:h:v:l", ["path=", "template=", "help", "version", "license"])
         except getopt.GetoptError:
             print("**Error parsing arguments.")
             traceback.print_exc()

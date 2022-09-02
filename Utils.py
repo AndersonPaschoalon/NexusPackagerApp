@@ -16,7 +16,11 @@ class Utils:
 
     @staticmethod
     def echo_info(message: str):
-        print(message)
+        print(colored(message, 'cyan'))
+
+    @staticmethod
+    def echo_debug(message: str):
+        print(colored(message, 'green'))
 
     @staticmethod
     def scandir(dir, ext):  # dir: str, ext: list
