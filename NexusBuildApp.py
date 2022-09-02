@@ -17,7 +17,7 @@ class NexusBuildApp:
 
     @staticmethod
     def help_menu():
-        print("todo")
+        print("Packager for mods in the nexus.")
 
     @staticmethod
     def print_version():
@@ -27,7 +27,30 @@ class NexusBuildApp:
 
     @staticmethod
     def print_license():
-        print("todo")
+        license_txt = """
+MIT License
+
+Copyright (c) 2022 Anderson Paschoalon
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.        
+        """
+        print(license_txt)
 
     @staticmethod
     def create_template(project_name):
@@ -41,7 +64,23 @@ class NexusBuildApp:
 
     @staticmethod
     def package_project(project_path):
-        return 1
+        ret_val = True
+        all_in_dir = os.listdir(project_path)
+        list_projs = []
+        for item in all_in_dir:
+            if str(item).endswith(NexusPackager.EXT_NXPROJ):
+                list_projs.append(str(item))
+        Utils.echo_info("List of projects: " + str(list_projs))
+        for proj in list_projs:
+            Utils.echo_info("* Processing project " + proj + "...")
+            ret, builder = NexusPackager.parse_build_file(proj)
+            if ret:
+                builder.package()
+            else:
+                Utils.echo_error("--> Error processing project " + proj + ".")
+                ret_val = False
+        Utils.echo_info("Processing projects procedure completed.")
+        return ret_val
 
     @staticmethod
     def error_handler(ret_val):
