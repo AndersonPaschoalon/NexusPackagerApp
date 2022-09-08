@@ -1,0 +1,45 @@
+<build>
+    <!--
+    (Mandatory)
+    directory where the game is installed. For skyrim it is usually:
+    C:\\Program Files (x86)\Steam\steamapps\common\Skyrim
+    -->
+    <game_path>
+    </game_path>
+    <!--
+    (Optional)
+    Folder where the plugins are placed, usually Data.
+    -->
+    <plugin_folder>
+    </plugin_folder>
+    <!--
+    (Mandatory)
+    Name of the mod
+    -->
+    <package_name>
+    </package_name>
+    <!--
+    (Default: Release)
+    Folder where the Files will be placed. Suggestion: Release, Debug, version  name...
+    -->
+    <build_dst>
+    </build_dst>
+    <rules>
+        <!--
+        Files that must be packed, but do not follow any prefix rules.
+        If you don't use prefix rules, just list all files hare, and leave the next tags empty.
+        -->
+        <hardcoded_files>
+        </hardcoded_files>
+        <!-- Prefix rules followed by your mod files. -->
+        <prefix_files>
+        </prefix_files>
+        <!-- All extensions that are going to be packed. -->
+        <prefix_accepted_extensions>
+        </prefix_accepted_extensions>
+        <!-- folders where the files that follow the prefix rule are going to be searched. -->
+        <prefix_search_dirs>
+        </prefix_search_dirs>
+    </rules>
+</build>
+

@@ -24,25 +24,27 @@ class NexusBuildApp:
 
     @staticmethod
     def help_menu():
-        print("    A simple packager for Nexus mods. This application is designed to process a .nxproj file,")
-        print("written in XML format. This files contains a set of rules to find all the files of a mod and ")
-        print("copy them into a zip package.It also generate an uninstall bat script, which can be executed")
-        print("delete all the files.")
+        print("                          ===>>> NEXUS BUILD APP <<<===                                          ")
+        print("")
+        print("    Nexus Build App is a  simple packager for Nexus mods. This application is designed to process a")
+        print(".nxproj file, written in XML format. This files contains a set of rules to find all the files of a mod")
+        print("and copy them into a zip package.It also generate an uninstall bat script, which can be executed delete")
+        print("all the files.")
         print("The .nxproj file defines:")
         print(" * game_path: The Path where the game is installed.")
-        print(" * plugin_folder: if this tag is defined, the files are going to be searched in the folder ")
-        print("   folder <game_path>/<plugin_folder>. If it is not, they are going to be searched at the root")
-        print("   folder of the game")
+        print(" * plugin_folder: if this tag is defined, the files are going to be searched in the folder folder")
+        print("   <game_path>/<plugin_folder>. If it is not, they are going to be searched at the root folder")
+        print("   of the game")
         print(" * package_name: Name of the Zip package that is going to be created.")
         print(" * build_dst: Directory where the zip will be saved.")
         print(" * rules: This tag contains a set of rules that are going to be followed to search the files.")
-        print(" * hardcoded_files: Any file listed here will be included. The files must be comma separated. ")
-        print("   The absolute path of the file will be <game_path>/<plugin_folder>/<hardcoded_file>. ")
+        print(" * hardcoded_files: Any file listed here will be included. The files must be comma separated. The ")
+        print("   absolute path of the file will be <game_path>/<plugin_folder>/<hardcoded_file>. ")
         print("   This tag should be used for files that do not follow prefix rules.")
         print(" * prefix_files: For files that used prefix rules, this tag can be used instead. Files whose name")
         print("   starts with the prefix will be included.")
-        print(" * prefix_accepted_extensions: Only files with the extensions included here (comma separated) will")
-        print("   be included in the package.")
+        print(" * prefix_accepted_extensions: Only files with the extensions included here (comma separated) will be")
+        print("   included in the package.")
         print(" * prefix_search_dirs: directory where the files will be searched.")
         print("")
         print("Usage:")
@@ -210,7 +212,7 @@ SOFTWARE.
         arg_str = ""
         ret_val = -1
         try:
-            opts, args = getopt.getopt(argv, "c:f:p:t:h:v:l", ["check=",  # 1
+            opts, args = getopt.getopt(argv, "c:f:p:t:hvl", ["check=",  # 1
                                                                "file=",  # 2
                                                                "path=",  # 3
                                                                "template=",  # 4

@@ -1,0 +1,131 @@
+
+<build>
+    <!--
+    (Mandatory)
+    directory where the game is installed. For skyrim it is usually:
+    C:\Program Files (x86)\Steam\steamapps\common\Skyrim
+    -->
+    <game_path>
+    	C:\Program Files (x86)\Steam\steamapps\common\Age of Mythology
+    </game_path>
+    <!--
+    (Optional)
+    Folder where the plugins are placed, usually Data.
+    -->
+    <plugin_folder>
+    </plugin_folder>   
+    <!--
+    (Mandatory) 
+    Name of the mod 
+    -->
+    <package_name>
+    	LostContinentOfAdria
+    </package_name>     
+    <!--
+    (Default: Release)
+    Folder where the Files will be placed. Suggestion: Release, Debug, version  name...
+    -->
+    <build_dst>
+    	Release
+    </build_dst>
+    <rules>
+        <!--
+        Files that must be packed, but do not follow any prefix rules.
+        If you don't use prefix rules, just list all files hare, and leave the next tags empty.
+        -->
+        <hardcoded_files>
+        	about_adria\Adria.jpg,
+        	data\Adria.cpx,
+        	scenario\adria\01_central_deserts_conquest_v2.scx,
+        	scenario\adria\02_defense_against_invaders_v2.scx,
+        	scenario\adria\03_savannahs_battle_v3.scx,
+        	scenario\adria\04_rocks_valleys_campaign_v3.scx,
+        	scenario\adria\05_cyclops_attack_v5.scx,
+			textures\adria\map1-row-1-column-1.ddt,
+			textures\adria\map1-row-1-column-2.ddt,
+			textures\adria\map1-row-1-column-3.ddt,
+			textures\adria\map1-row-1-column-4.ddt,
+			textures\adria\map1-row-2-column-1.ddt,
+			textures\adria\map1-row-2-column-2.ddt,
+			textures\adria\map1-row-2-column-3.ddt,
+			textures\adria\map1-row-2-column-4.ddt,
+			textures\adria\map1-row-3-column-1.ddt,
+			textures\adria\map1-row-3-column-2.ddt,
+			textures\adria\map1-row-3-column-3.ddt,
+			textures\adria\map1-row-3-column-4.ddt,
+			textures\adria\map2-row-1-column-1.ddt,
+			textures\adria\map2-row-1-column-2.ddt,
+			textures\adria\map2-row-1-column-3.ddt,
+			textures\adria\map2-row-1-column-4.ddt,
+			textures\adria\map2-row-2-column-1.ddt,
+			textures\adria\map2-row-2-column-2.ddt,
+			textures\adria\map2-row-2-column-3.ddt,
+			textures\adria\map2-row-2-column-4.ddt,
+			textures\adria\map2-row-3-column-1.ddt,
+			textures\adria\map2-row-3-column-2.ddt,
+			textures\adria\map2-row-3-column-3.ddt,
+			textures\adria\map2-row-3-column-4.ddt,
+			textures\adria\map3-row-1-column-1.ddt,
+			textures\adria\map3-row-1-column-2.ddt,
+			textures\adria\map3-row-1-column-3.ddt,
+			textures\adria\map3-row-1-column-4.ddt,
+			textures\adria\map3-row-2-column-1.ddt,
+			textures\adria\map3-row-2-column-2.ddt,
+			textures\adria\map3-row-2-column-3.ddt,
+			textures\adria\map3-row-2-column-4.ddt,
+			textures\adria\map3-row-3-column-1.ddt,
+			textures\adria\map3-row-3-column-2.ddt,
+			textures\adria\map3-row-3-column-3.ddt,
+			textures\adria\map3-row-3-column-4.ddt,
+			textures\adria\map4-row-1-column-1.ddt,
+			textures\adria\map4-row-1-column-2.ddt,
+			textures\adria\map4-row-1-column-3.ddt,
+			textures\adria\map4-row-1-column-4.ddt,
+			textures\adria\map4-row-2-column-1.ddt,
+			textures\adria\map4-row-2-column-2.ddt,
+			textures\adria\map4-row-2-column-3.ddt,
+			textures\adria\map4-row-2-column-4.ddt,
+			textures\adria\map4-row-3-column-1.ddt,
+			textures\adria\map4-row-3-column-2.ddt,
+			textures\adria\map4-row-3-column-3.ddt,
+			textures\adria\map4-row-3-column-4.ddt,
+			textures\adria\map5-row-1-column-1.ddt,
+			textures\adria\map5-row-1-column-2.ddt,
+			textures\adria\map5-row-1-column-3.ddt,
+			textures\adria\map5-row-1-column-4.ddt,
+			textures\adria\map5-row-2-column-1.ddt,
+			textures\adria\map5-row-2-column-2.ddt,
+			textures\adria\map5-row-2-column-3.ddt,
+			textures\adria\map5-row-2-column-4.ddt,
+			textures\adria\map5-row-3-column-1.ddt,
+			textures\adria\map5-row-3-column-2.ddt,
+			textures\adria\map5-row-3-column-3.ddt,
+			textures\adria\map5-row-3-column-4.ddt,
+			rm2\version2.4\Arabian Desert.xml,
+			rm2\version2.4\Arabian Desert.xs,
+			rm2\version2.4\Elysius Camps.xml,
+			rm2\version2.4\Elysius Camps.xs,
+			rm2\version2.4\Guardians A.xml,
+			rm2\version2.4\Guardians A.xs,
+			rm2\version2.4\Guardians B.xml,
+			rm2\version2.4\Guardians B.xs,
+			rm2\version2.4\One Settlement.xml,
+			rm2\version2.4\One Settlement.xs,
+			rm2\version2.4\Ragnarock.xml,
+			rm2\version2.4\Ragnarock.xs,
+			rm2\version2.4\Sahara Desert.xml,
+			rm2\version2.4\Sahara Desert.xs,
+			rm2\version2.4\Starting Army.xml,
+			rm2\version2.4\Starting Army.xs
+        </hardcoded_files>
+        <!-- Prefix rules followed by your mod files. -->
+        <prefix_files>
+        </prefix_files>
+        <!-- All extensions that are going to be packed. -->
+        <prefix_accepted_extensions>
+        </prefix_accepted_extensions>
+        <!-- folders where the files that follow the prefix rule are going to be searched. -->
+        <prefix_search_dirs>
+        </prefix_search_dirs>
+    </rules>
+</build>        
