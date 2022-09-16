@@ -213,12 +213,12 @@ SOFTWARE.
         ret_val = -1
         try:
             opts, args = getopt.getopt(argv, "c:f:p:t:hvl", ["check=",  # 1
-                                                               "file=",  # 2
-                                                               "path=",  # 3
-                                                               "template=",  # 4
-                                                               "help",
-                                                               "version",
-                                                               "license"])
+                                                             "file=",  # 2
+                                                             "path=",  # 3
+                                                             "template=",  # 4
+                                                             "help",
+                                                             "version",
+                                                             "license"])
         except getopt.GetoptError:
             print("**Error parsing arguments.")
             traceback.print_exc()

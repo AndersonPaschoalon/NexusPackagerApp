@@ -60,7 +60,15 @@ class NexusPackager:
             # GAME PATH
             if child.tag == NexusPackager.TAG_GAME_PATH:
                 path_game_str = str(child.text).strip()
+                # TEST ##########################################################################################################################
+                if path_game_str.startswith("."):
+                    # dot directory (current)
+                    dot_dir = os.path.dirname(build_rules_file)
+                    path_game_str = path_game_str.replace(".", dot_dir, '')
+                # TEST ##########################################################################################################################
                 game_path = Path(path_game_str)
+
+
 
             # BUILD DST
             elif child.tag == NexusPackager.TAG_BUILD_DST:
