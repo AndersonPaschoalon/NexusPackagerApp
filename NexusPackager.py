@@ -63,8 +63,8 @@ class NexusPackager:
                 # TEST ##########################################################################################################################
                 if path_game_str.startswith("."):
                     # dot directory (current)
-                    dot_dir = os.path.dirname(build_rules_file)
-                    path_game_str = path_game_str.replace(".", dot_dir, '')
+                    dot_dir = os.getcwd()
+                    path_game_str = path_game_str.replace(".", dot_dir)
                 # TEST ##########################################################################################################################
                 game_path = Path(path_game_str)
 
