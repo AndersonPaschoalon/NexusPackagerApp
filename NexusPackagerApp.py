@@ -9,7 +9,7 @@ from Cd import Cd
 
 class NexusPackagerApp:
     APP_NAME = "NexusBuild"
-    APP_VERSION = "0.1.0"
+    APP_VERSION = "v1.0.0.0"
     SUCCESS = 0
     # error system
     ERROR_DEFAULT = 1
@@ -61,7 +61,7 @@ SOFTWARE.
             NexusPackagerApp.exe -t template-file-name
         Check if a nxproj file is in the right format.
             NexusPackagerApp.exe -c nxproj-file-path
-    
+
     DESCRIPTION 
 	    About the Application:
 
@@ -166,11 +166,23 @@ SOFTWARE.
         At the end, you will have a folder "Release" created in your desktop, and 
         a MyModPackage.zip inside it.
 
-
-    
-    
     OPTIONS
-    
+        -p <game-install-folder>, --path=<game-install-folder>
+            Build all projects defined by .nxproj files inside a directory 
+            <game-install-folder>.
+        -f <nxproj-project-file>, --file=<nxproj-project-file>
+            Build an specified project defined by a .nxproj file.
+        -t <nxproj-file-name>, --template=<nxproj-file-name>
+            Generate an .nxproj file template file with the name <nxproj-file-name>. 
+        -c <nxproj-file-name>, --check=<nxproj-file-name>
+            Check if the syntax of a <nxproj-file-name> is valid or not, but do not
+            build the package.
+        -h, --help
+            Prints this help manual.
+        -l, --license:
+            Prints application license.
+        -v, --version:
+            Prints application version
     
     """
 
