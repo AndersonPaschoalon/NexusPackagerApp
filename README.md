@@ -12,6 +12,7 @@ This application:
 * Scriptable rules, write once, so you will never forget any files;
 * Creates an uninstall script. 
 
+
 ## Manual
 
 ```
@@ -155,3 +156,28 @@ OPTIONS
         Prints application version
 
 ```
+
+
+## Development and Build
+
+* PyCharm Community was used for the development.
+* To *build* the executable file and exeute the tests, just execute `.\build-app.bat`. The binary file will be located at `.\dist\`
+
+
+## RELEASE HISTORY
+
+2022.09.24, v1.0.0.0, First stable version
+
+
+## Changelog
+
+2022.09.18, v1.0.0.0, First stable version supporting building from path and file, check syntax or project file and creation of template. 
+
+
+## Credits
+
+* Application developed by Anderson Paschoalon
+
+* Python packages used can be found at [requirements.txt](requirements.txt)
+
+
