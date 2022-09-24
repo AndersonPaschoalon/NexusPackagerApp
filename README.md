@@ -1,6 +1,6 @@
-# Nexus Build App
+![Nexus Packager App](./Doc/logofull.png)
 
-![Nexus Packager App](./Doc/logo2.png)
+# Nexus Build App
 
 Nexus Packager App is a command-line tool for automating the packaging process of Nexus mods.
 
